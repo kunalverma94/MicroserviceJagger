@@ -4,7 +4,7 @@ services:
   orderservice:
     image: kunal94vverma:OrderJaggerMYSQL
     ports:
-      - "1111:8080"
+      - "1111:80"
     build:
       context: .
       dockerfile: OrderService/Dockerfile
@@ -19,7 +19,7 @@ services:
       - userid=root
       - port=3333
     ports:
-      - "2222:8080"
+      - "2222:80"
     depends_on:
       - mysql 
     build:
