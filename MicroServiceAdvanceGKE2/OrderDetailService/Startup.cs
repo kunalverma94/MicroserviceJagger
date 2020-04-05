@@ -12,12 +12,14 @@ using OpenTracing;
 using OpenTracing.Util;
 using System.Reflection;
 
-namespace UserService
+
+namespace OrderDetailService
 {
     public class Startup
     {
         public static string configVersion = "";
-        public static string connectionstring = "";
+        public static string OrderApi = "";
+        public static string UserApi = "";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,6 +30,10 @@ namespace UserService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+            configVersion = this.Configuration.GetValue<string>("ConfigVersion");
+            OrderApi = this.Configuration.GetValue<string>("orderapi");
+            UserApi = this.Configuration.GetValue<string>("userapi");
             services.AddSingleton<ITracer>(serviceProvider =>
             {
                 string serviceName = Assembly.GetEntryAssembly().GetName().Name;
@@ -52,14 +58,6 @@ namespace UserService
                 return tracer;
             });
             services.AddOpenTracing();
-            var port = this.Configuration.GetValue<string>("port") != null ? this.Configuration.GetValue<string>("port") : "3306";
-            configVersion = this.Configuration.GetValue<string>("ConfigVersion");
-            connectionstring = @$"server={ this.Configuration.GetValue<string>("server")}
-                                ;userid={ this.Configuration.GetValue<string>("userid")}
-                                ;password={ this.Configuration.GetValue<string>("password")};
-                                ;port= {port};
-                                ;database=sys";
-
             services.AddControllers();
         }
 

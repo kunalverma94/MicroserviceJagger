@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 
 namespace OrderService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Route("/")]
     public class OrderController : ControllerBase
     {
         [HttpGet]
         [Route("{id}")]
-        public Object Get(string id="0")
+        public Object Get(string id = "1")
         {
             return new
             {
@@ -34,7 +34,6 @@ namespace OrderService.Controllers
         public string Get()
         {
             return $"{nameof(OrderController)}.{nameof(Get)} Healthy \n cv:{Startup.configVersion}";
-
         }
     }
 }

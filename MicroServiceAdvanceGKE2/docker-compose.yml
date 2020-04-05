@@ -1,6 +1,31 @@
 version: '3.4'
 
 services:
+
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3306:3306"
+    networks: 
+      - backend
+
+  jagerservice:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411 
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    networks: 
+      - backend
+
   orderservice:
     image: kunal94vverma:OrderJaggerMYSQL
     ports:
@@ -8,36 +33,49 @@ services:
     build:
       context: .
       dockerfile: OrderService/Dockerfile
+    depends_on:
+      - jagerservice 
     networks: 
       - backend
 
   userservice:
     image: kunal94vverma:UserJaggerMYSQL
     environment:
-      - server=localhost
+      - server=mysql
       - password=password
       - userid=root
-      - port=3333
+      - port=3306
     ports:
       - "2222:80"
     depends_on:
       - mysql 
+      - jagerservice 
     build:
       context: .
       dockerfile: UserService/Dockerfile
     networks: 
       - backend
 
-  mysql:
-    image: mysql
+  orderdetailservice:
+    image: kunal94vverma:OrderDetailJaggerMYSQL
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      - orderapi=orderservice
+      - userapi=userservice
     ports:
-      - "3333:3306"
+      - "3333:80"
+    depends_on:
+      - userservice 
+      - orderservice 
+      - jagerservice 
+    build:
+      context: .
+      dockerfile: OrderDetailService/Dockerfile
     networks: 
       - backend
 
 networks: 
   backend: 
     driver: bridge
+
+
 

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace UserService
+namespace OrderDetailService
 {
     public class Program
     {
@@ -9,6 +9,7 @@ namespace UserService
         {
             CreateHostBuilder(args).Build().Run();
         }
+
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>

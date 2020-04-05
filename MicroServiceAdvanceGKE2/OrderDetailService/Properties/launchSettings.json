@@ -1,0 +1,37 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:61370",
+      "sslPort": 0
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "orderdetail/1",
+      "environmentVariables": {
+        "orderapi": "localhost:5000",
+        "userapi": "localhost:5000"
+      }
+    },
+    "OrderDetailService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "orderdetail",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
+      "publishAllPorts": true
+    }
+  }
+}

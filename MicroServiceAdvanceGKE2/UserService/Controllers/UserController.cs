@@ -4,10 +4,12 @@ namespace UserService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Route("/")]
     public class UserController : ControllerBase
     {
         [HttpGet]
-        public object Get()
+        [Route("/user/{id}")]
+        public object Get(string id = "1")
         {
             SeedValues();
             string cs = Startup.connectionstring;
@@ -32,14 +34,19 @@ namespace UserService.Controllers
             return user;
         }
 
-        private  void SeedValues()
+        [HttpGet]
+        public string Get()
+        {
+            return $"{nameof(UserController)}.{nameof(Get)} Healthy \n cv:{Startup.configVersion}";
+        }
+        private void SeedValues()
         {
             try
             {
                 string cs = Startup.connectionstring;
-                using (var con = new MySqlConnection(cs) 
+                using (var con = new MySqlConnection(cs)
                 {
-                    
+
                 })
                 {
                     con.Open();
