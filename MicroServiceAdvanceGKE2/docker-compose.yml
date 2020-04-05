@@ -27,7 +27,7 @@ services:
       - backend
 
   orderservice:
-    image: kunal94vverma:OrderJaggerMYSQL
+    image: kunal94vverma:orderjag
     ports:
       - "1111:80"
     environment:
@@ -42,7 +42,7 @@ services:
       - backend
 
   userservice:
-    image: kunal94vverma:UserJaggerMYSQL
+    image: kunal94vverma:userjag
     environment:
       - sqlserver=mysql
       - password=password
@@ -62,7 +62,7 @@ services:
       - backend
 
   orderdetailservice:
-    image: kunal94vverma:OrderDetailJaggerMYSQL
+    image: kunal94vverma:orderdetailjag
     environment:
       - orderapi=orderservice
       - userapi=userservice
