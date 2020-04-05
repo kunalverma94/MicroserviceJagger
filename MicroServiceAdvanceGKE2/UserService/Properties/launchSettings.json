@@ -19,9 +19,10 @@
       "launchBrowser": true,
       "launchUrl": "user",
       "environmentVariables": {
-        "server": "localhost",
         "password": "password",
-        "userid": "root"
+        "sqlport": "3306",
+        "sqluserid": "root",
+        "sqlserver": "localhost"
       },
       "applicationUrl": "http://localhost:5000"
     },

@@ -55,7 +55,19 @@ namespace OrderService
             services.AddHttpClient();
             services.AddControllers();
         }
-
+        private void AddJaggerTracing(IServiceCollection services)
+        {
+            AddJaggerTracing(services);
+        }
+        private string getEnv(string key, string defaultValue = null)
+        {
+            if (defaultValue == null)
+            {
+                defaultValue = key;
+            }
+            var val = Configuration.GetValue<string>(key);
+            return val != null ? val : defaultValue;
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

@@ -28,6 +28,20 @@ namespace UserService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AddJaggerTracing(services);
+
+            configVersion = this.Configuration.GetValue<string>("ConfigVersion");
+            connectionstring = @$"server={ this.Configuration.GetValue<string>("sqlserver")}
+                                ;userid={ this.Configuration.GetValue<string>("sqluserid")}
+                                ;password={ getEnv("password")};
+                                ;port= {getEnv("sqlport", "3306")};
+                                ;database=sys";
+
+            services.AddControllers();
+        }
+
+        private void AddJaggerTracing(IServiceCollection services)
+        {
             services.AddSingleton<ITracer>(serviceProvider =>
             {
                 string serviceName = Assembly.GetEntryAssembly().GetName().Name;
@@ -38,7 +52,7 @@ namespace UserService
 
                 var reporter = new RemoteReporter.Builder()
                     .WithLoggerFactory(loggerFactory)
-                    .WithSender(new UdpSender("jagerservice", 6831, 0))
+                    .WithSender(new UdpSender(getEnv("jagerservice"), int.Parse(getEnv("jagerPort", "6831")), 0))
                     .Build();
 
                 ITracer tracer = new Tracer.Builder(serviceName)
@@ -52,16 +66,15 @@ namespace UserService
                 return tracer;
             });
             services.AddOpenTracing();
-            var port = this.Configuration.GetValue<string>("port") != null ? this.Configuration.GetValue<string>("port") : "3306";
-            var password = this.Configuration.GetValue<string>("password") != null ? this.Configuration.GetValue<string>("password") : "password";
-            configVersion = this.Configuration.GetValue<string>("ConfigVersion");
-            connectionstring = @$"server={ this.Configuration.GetValue<string>("server")}
-                                ;userid={ this.Configuration.GetValue<string>("userid")}
-                                ;password={ password};
-                                ;port= {port};
-                                ;database=sys";
-
-            services.AddControllers();
+        }
+        private string getEnv(string key, string defaultValue=null)
+        {
+            if (defaultValue == null)
+            {
+                defaultValue = key;
+            }
+            var val = Configuration.GetValue<string>(key);
+            return val != null ? val : defaultValue;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

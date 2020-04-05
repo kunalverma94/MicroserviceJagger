@@ -30,6 +30,9 @@ services:
     image: kunal94vverma:OrderJaggerMYSQL
     ports:
       - "1111:80"
+    environment:
+      - jagerservice=jagerservice
+      - jagerPort=6831
     build:
       context: .
       dockerfile: OrderService/Dockerfile
@@ -41,10 +44,12 @@ services:
   userservice:
     image: kunal94vverma:UserJaggerMYSQL
     environment:
-      - server=mysql
+      - sqlserver=mysql
       - password=password
-      - userid=root
-      - port=3306
+      - sqluserid=root
+      - sqlport=3306
+      - jagerservice=jagerservice
+      - jagerPort=6831
     ports:
       - "2222:80"
     depends_on:
@@ -61,6 +66,8 @@ services:
     environment:
       - orderapi=orderservice
       - userapi=userservice
+      - jagerservice=jagerservice
+      - jagerPort=6831
     ports:
       - "3333:80"
     depends_on:

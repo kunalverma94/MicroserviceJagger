@@ -34,6 +34,14 @@ namespace OrderDetailService
             configVersion = this.Configuration.GetValue<string>("ConfigVersion");
             OrderApi = this.Configuration.GetValue<string>("orderapi");
             UserApi = this.Configuration.GetValue<string>("userapi");
+
+            AddJaggerTracing(services);
+
+            services.AddControllers();
+        }
+
+        private void AddJaggerTracing(IServiceCollection services)
+        {
             services.AddSingleton<ITracer>(serviceProvider =>
             {
                 string serviceName = Assembly.GetEntryAssembly().GetName().Name;
@@ -44,7 +52,7 @@ namespace OrderDetailService
 
                 var reporter = new RemoteReporter.Builder()
                     .WithLoggerFactory(loggerFactory)
-                    .WithSender(new UdpSender("jagerservice", 6831, 0))
+                    .WithSender(new UdpSender(getEnv("jagerservice"), int.Parse(getEnv("jagerPort", "6831")), 0))
                     .Build();
 
                 ITracer tracer = new Tracer.Builder(serviceName)
@@ -58,9 +66,16 @@ namespace OrderDetailService
                 return tracer;
             });
             services.AddOpenTracing();
-            services.AddControllers();
         }
-
+        private string getEnv(string key, string defaultValue = null)
+        {
+            if (defaultValue == null)
+            {
+                defaultValue = key;
+            }
+            var val = Configuration.GetValue<string>(key);
+            return val != null ? val : defaultValue;
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
