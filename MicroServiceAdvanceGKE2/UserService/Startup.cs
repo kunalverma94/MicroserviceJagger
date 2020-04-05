@@ -53,10 +53,11 @@ namespace UserService
             });
             services.AddOpenTracing();
             var port = this.Configuration.GetValue<string>("port") != null ? this.Configuration.GetValue<string>("port") : "3306";
+            var password = this.Configuration.GetValue<string>("password") != null ? this.Configuration.GetValue<string>("password") : "password";
             configVersion = this.Configuration.GetValue<string>("ConfigVersion");
             connectionstring = @$"server={ this.Configuration.GetValue<string>("server")}
                                 ;userid={ this.Configuration.GetValue<string>("userid")}
-                                ;password={ this.Configuration.GetValue<string>("password")};
+                                ;password={ password};
                                 ;port= {port};
                                 ;database=sys";
 
