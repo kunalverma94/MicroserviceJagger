@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  jagerPort: "6831"
+  jagerservice: jagerservice
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-06T07:37:49Z"
+  labels:
+    app: orderservice
+  name: orderservice-config-ywlf
+  namespace: default
+  resourceVersion: "25090"
+  selfLink: /api/v1/namespaces/default/configmaps/orderservice-config-ywlf
+  uid: 840b98ab-77d9-11ea-bf44-42010a80002c

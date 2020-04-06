@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2020-04-06T07:31:22Z"
+  generation: 2
+  labels:
+    app: userservice
+  name: userservice
+  namespace: default
+  resourceVersion: "24831"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/userservice
+  uid: 9d9a208f-77d8-11ea-bf44-42010a80002c
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: userservice
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: userservice
+    spec:
+      containers:
+      - env:
+        - name: sqlserver
+          valueFrom:
+            configMapKeyRef:
+              key: sqlserver
+              name: userservice-config-of0w
+        - name: password
+          valueFrom:
+            configMapKeyRef:
+              key: password
+              name: userservice-config-of0w
+        - name: sqluserid
+          valueFrom:
+            configMapKeyRef:
+              key: sqluserid
+              name: userservice-config-of0w
+        - name: sqlport
+          valueFrom:
+            configMapKeyRef:
+              key: sqlport
+              name: userservice-config-of0w
+        - name: jagerservice
+          valueFrom:
+            configMapKeyRef:
+              key: jagerservice
+              name: userservice-config-of0w
+        - name: jagerPort
+          valueFrom:
+            configMapKeyRef:
+              key: jagerPort
+              name: userservice-config-of0w
+        image: kunal94vverma/userjag
+        imagePullPolicy: Always
+        name: userjag-1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2020-04-06T07:31:25Z"
+    lastUpdateTime: "2020-04-06T07:31:25Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2020-04-06T07:31:22Z"
+    lastUpdateTime: "2020-04-06T07:31:25Z"
+    message: ReplicaSet "userservice-b48b58579" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

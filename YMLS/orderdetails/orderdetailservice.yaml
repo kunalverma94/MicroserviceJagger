@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-04-06T07:46:24Z"
+  labels:
+    app: orderdetailservice
+  name: orderdetailservice
+  namespace: default
+  resourceVersion: "27122"
+  selfLink: /api/v1/namespaces/default/services/orderdetailservice
+  uid: b72de169-77da-11ea-bf44-42010a80002c
+spec:
+  clusterIP: 10.24.8.230
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30577
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: orderdetailservice
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 35.224.136.126

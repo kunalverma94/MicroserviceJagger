@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  jagerPort: "6831"
+  jagerservice: jagerservice
+  orderapi: orderservice
+  userapi: userservice
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-06T07:45:59Z"
+  labels:
+    app: orderdetailservice
+  name: orderdetailservice-config-agdb
+  namespace: default
+  resourceVersion: "26888"
+  selfLink: /api/v1/namespaces/default/configmaps/orderdetailservice-config-agdb
+  uid: a7e08613-77da-11ea-bf44-42010a80002c

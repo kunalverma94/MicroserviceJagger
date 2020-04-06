@@ -3,3 +3,6 @@ k.ps1
 **/pocdb
 **/bin
 **/obj
+**/package
+*.dll
+~$croservices Advanced.docx

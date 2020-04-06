@@ -1,0 +1,75 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "orderdetailservice-config-76cq"
+  namespace: "default"
+  labels:
+    app: "orderdetailservice"
+data:
+  orderapi: "orderservice"
+  userapi: "userservice"
+  jagerservice: "jagerservice"
+  jagerPort: "6831"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "orderdetailservice"
+  namespace: "default"
+  labels:
+    app: "orderdetailservice"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "orderdetailservice"
+  template:
+    metadata:
+      labels:
+        app: "orderdetailservice"
+    spec:
+      containers:
+        - name: "orderdetailjag-1"
+          image: "kunal94vverma/orderdetailjag"
+          env:
+            - name: "orderapi"
+              valueFrom:
+                configMapKeyRef:
+                  key: "orderapi"
+                  name: "orderdetailservice-config-76cq"
+            - name: "userapi"
+              valueFrom:
+                configMapKeyRef:
+                  key: "userapi"
+                  name: "orderdetailservice-config-76cq"
+            - name: "jagerservice"
+              valueFrom:
+                configMapKeyRef:
+                  key: "jagerservice"
+                  name: "orderdetailservice-config-76cq"
+            - name: "jagerPort"
+              valueFrom:
+                configMapKeyRef:
+                  key: "jagerPort"
+                  name: "orderdetailservice-config-76cq"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "orderdetailservice-hpa-rbid"
+  namespace: "default"
+  labels:
+    app: "orderdetailservice"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "orderdetailservice"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        targetAverageUtilization: 80

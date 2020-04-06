@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-04-06T07:32:06Z"
+  generateName: jagerservice-
+  labels:
+    app: jagerservice
+  name: jagerservice-925cq
+  namespace: default
+  resourceVersion: "23983"
+  selfLink: /api/v1/namespaces/default/services/jagerservice-925cq
+  uid: b7dee8b7-77d8-11ea-bf44-42010a80002c
+spec:
+  clusterIP: 10.24.3.245
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 32407
+    port: 80
+    protocol: TCP
+    targetPort: 16686
+  selector:
+    app: jagerservice
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.67.23.24

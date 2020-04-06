@@ -1,0 +1,63 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "orderservice-config-f9lg"
+  namespace: "default"
+  labels:
+    app: "orderservice"
+data:
+  jagerservice: "jagerservice"
+  jagerPort: "6831"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "orderservice"
+  namespace: "default"
+  labels:
+    app: "orderservice"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "orderservice"
+  template:
+    metadata:
+      labels:
+        app: "orderservice"
+    spec:
+      containers:
+        - name: "orderjag-1"
+          image: "kunal94vverma/orderjag"
+          env:
+            - name: "jagerservice"
+              valueFrom:
+                configMapKeyRef:
+                  key: "jagerservice"
+                  name: "orderservice-config-f9lg"
+            - name: "jagerPort"
+              valueFrom:
+                configMapKeyRef:
+                  key: "jagerPort"
+                  name: "orderservice-config-f9lg"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "orderservice-hpa-yb4a"
+  namespace: "default"
+  labels:
+    app: "orderservice"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "orderservice"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        targetAverageUtilization: 80

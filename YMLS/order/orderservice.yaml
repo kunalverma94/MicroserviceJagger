@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2020-04-06T07:37:49Z"
+  generation: 2
+  labels:
+    app: orderservice
+  name: orderservice
+  namespace: default
+  resourceVersion: "26278"
+  selfLink: /apis/apps/v1/namespaces/default/deployments/orderservice
+  uid: 84507966-77d9-11ea-bf44-42010a80002c
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: orderservice
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: orderservice
+    spec:
+      containers:
+      - env:
+        - name: jagerservice
+          valueFrom:
+            configMapKeyRef:
+              key: jagerservice
+              name: orderservice-config-ywlf
+        - name: jagerPort
+          valueFrom:
+            configMapKeyRef:
+              key: jagerPort
+              name: orderservice-config-ywlf
+        image: kunal94vverma/orderjag
+        imagePullPolicy: Always
+        name: orderjag-1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2020-04-06T07:37:53Z"
+    lastUpdateTime: "2020-04-06T07:37:53Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2020-04-06T07:37:49Z"
+    lastUpdateTime: "2020-04-06T07:37:53Z"
+    message: ReplicaSet "orderservice-57dfbc5c98" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

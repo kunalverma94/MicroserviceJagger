@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  COLLECTOR_ZIPKIN_HTTP_PORT: "9411"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-06T06:06:23Z"
+  labels:
+    app: jagerservice
+  name: jagerservice-config-765k
+  namespace: default
+  resourceVersion: "5536"
+  selfLink: /api/v1/namespaces/default/configmaps/jagerservice-config-765k
+  uid: be51353a-77cc-11ea-bf44-42010a80002c

@@ -1,0 +1,18 @@
+apiVersion: v1
+data:
+  jagerPort: "6831"
+  jagerservice: jagerservice
+  password: password
+  sqlport: "3306"
+  sqlserver: mysql
+  sqluserid: root
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-04-06T07:31:22Z"
+  labels:
+    app: userservice
+  name: userservice-config-of0w
+  namespace: default
+  resourceVersion: "23673"
+  selfLink: /api/v1/namespaces/default/configmaps/userservice-config-of0w
+  uid: 9d928027-77d8-11ea-bf44-42010a80002c

@@ -1,0 +1,87 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "userservice-config-1x81"
+  namespace: "default"
+  labels:
+    app: "userservice"
+data:
+  sqlserver: "mysql"
+  password: "password"
+  sqluserid: "root"
+  sqlport: "3306"
+  jagerservice: "jagerservice"
+  jagerPort: "6831"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "userservice"
+  namespace: "default"
+  labels:
+    app: "userservice"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "userservice"
+  template:
+    metadata:
+      labels:
+        app: "userservice"
+    spec:
+      containers:
+        - name: "orderjag-1"
+          image: "kunal94vverma/orderjag"
+          env:
+            - name: "sqlserver"
+              valueFrom:
+                configMapKeyRef:
+                  key: "sqlserver"
+                  name: "userservice-config-1x81"
+            - name: "password"
+              valueFrom:
+                configMapKeyRef:
+                  key: "password"
+                  name: "userservice-config-1x81"
+            - name: "sqluserid"
+              valueFrom:
+                configMapKeyRef:
+                  key: "sqluserid"
+                  name: "userservice-config-1x81"
+            - name: "sqlport"
+              valueFrom:
+                configMapKeyRef:
+                  key: "sqlport"
+                  name: "userservice-config-1x81"
+            - name: "jagerservice"
+              valueFrom:
+                configMapKeyRef:
+                  key: "jagerservice"
+                  name: "userservice-config-1x81"
+            - name: "jagerPort"
+              valueFrom:
+                configMapKeyRef:
+                  key: "jagerPort"
+                  name: "userservice-config-1x81"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "userservice-hpa-absz"
+  namespace: "default"
+  labels:
+    app: "userservice"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "userservice"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: "Resource"
+      resource:
+        name: "cpu"
+        targetAverageUtilization: 80
